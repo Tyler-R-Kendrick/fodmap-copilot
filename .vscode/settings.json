@@ -1,0 +1,5 @@
+{
+    "csharp.preview.improvedLaunchExperience": true,
+    "dotnet.automaticallyCreateSolutionInWorkspace": true,
+    "dotnet.defaultSolution": "",
+}

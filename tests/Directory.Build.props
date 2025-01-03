@@ -1,0 +1,17 @@
+<Project>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove(Directory.Build.props, $(MSBuildThisFileDirectory)..))" />
+    
+    <PropertyGroup>
+        <src>..\..\src</src>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+
+        <OutputType>Exe</OutputType>
+        <EnableMSTestRunner>true</EnableMSTestRunner>
+
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+        <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+        <TestingPlatformCaptureOutput>false</TestingPlatformCaptureOutput>
+    </PropertyGroup>
+
+</Project>

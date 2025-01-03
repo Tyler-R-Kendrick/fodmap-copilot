@@ -1,0 +1,7 @@
+<Project Sdk="MSTest.Sdk/3.3.1">
+
+  <ItemGroup>
+    <ProjectReference Include="$(src)\API\*.csproj" />
+  </ItemGroup>
+
+</Project>
