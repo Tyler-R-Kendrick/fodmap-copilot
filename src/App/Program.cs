@@ -4,23 +4,31 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Data;
 using OpenAI.Chat;
+using OpenAI;
 
 HostApplicationBuilder builder = new();
 
 var host = builder.Build();
-var apiKey = builder.Configuration["BingApiKey"]
+var bingApiKey = builder.Configuration["BingApiKey"]
     ?? throw new ArgumentException("BingApiKey is not set in configuration.");
+var openAiApiKey = builder.Configuration["OpenAiApiKey"]
+    ?? throw new ArgumentException("OpenAiApiKey is not set in configuration.");
 var kernelBuilder = Kernel.CreateBuilder();
-kernelBuilder.AddOpenAIChatCompletion("gpt4o");
 #pragma warning disable SKEXP0050 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-kernelBuilder.AddBingTextSearch(apiKey);
+kernelBuilder.AddBingTextSearch(bingApiKey);
+
+kernelBuilder.Services.AddSingleton<IChatClient>(services =>
+    new OpenAIClient(openAiApiKey).AsChatClient("gpt-4o-mini"));
+kernelBuilder.AddOpenAIChatCompletion(
+    modelId: "gpt-4o",
+    apiKey: openAiApiKey);
 kernelBuilder.Services.AddSingleton<FodmapResearchPlugin>();
 kernelBuilder.Plugins.AddFromType<FodmapResearchPlugin>();
 var kernel = kernelBuilder.Build();
 
 // Create an ITextSearch instance using Bing search
 #pragma warning disable SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-var result = await kernel.InvokePromptAsync("Is broccoli a FODMAP?");
+var result = await kernel.InvokePromptAsync("Is chocolate a FODMAP?");
 Console.WriteLine(result);
 Console.ReadLine(); // Wait for user input before closing
 #pragma warning restore SKEXP0050 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
@@ -77,10 +85,12 @@ class FodmapResearchPlugin(IChatClient chatClient)
         [Description("The sensitivity levels for the food.")]
         SensitivityLevel[] SensitivityLevels);
 
+    [KernelFunction]
     [Description("Research Food sensitivities for a given food name.")]
     public async Task<FoodSensitivity> ResearchFoodSensitivityAsync(
         [Description("The name of the food being researched.")] string foodName)
     {
+        Console.WriteLine("Researching food sensitivities...");
         var sensitivityCategoryNames = Enum.GetNames<SensitivityCategory>();
         var intoleranceLevelNames = Enum.GetNames<IntoleranceLevel>();
         var intoleranceLevelPrompt = $"Choose from {string.Join(", ", intoleranceLevelNames)}";
