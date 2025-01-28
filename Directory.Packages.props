@@ -1,5 +1,6 @@
 <Project>
   <ItemGroup>
+    <PackageVersion Include="Microsoft.Azure.CognitiveServices.Search.WebSearch" Version="2.0.0" />
     <PackageVersion Include="Microsoft.Extensions.AI" Version="9.0.1-preview.1.24570.5" />
     <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="9.0.1-preview.1.24570.5" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.0" />

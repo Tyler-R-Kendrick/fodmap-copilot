@@ -16,7 +16,15 @@
 				"EditorConfig.EditorConfig"
 			]
 		}
-	}
+	},
+    "secrets": {
+        "BingApiKey": {
+            "description": "Bing API Key"
+        },
+        "OpenAiApiKey": {
+            "description": "OpenAI API Key"
+        }
+    }
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
